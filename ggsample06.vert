@@ -31,11 +31,15 @@ void main(void)
   vec3 v = -normalize(p.xyz / p.w);                 // 視線ベクトル
   vec3 l = normalize((pl * p.w - p * pl.w).xyz);    // 光線ベクトル
   vec3 n = normalize((mg * cv).xyz);                // 法線ベクトル
+  float lsize = sqrt(l.x * l.x + l.y * l.y + l.z * l.z);
+  float vsize = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+  vec3 h = (l + v)/(lsize + vsize);// 中間ベクトル
 
   //【宿題】下の１行（の右辺）を置き換えてください
   vec4 iamb = vec4(kamb.x * lamb.x , kamb.y * lamb.y , kamb.z * lamb.z, kamb.w * lamb.w);
-  //vec4 idiff = 
-  //vec4 ispec = 
+  //vec4 idiff =
+  //float NH = n.x + h
+  //vec4 ispec = Max()
   vc = iamb;
 
   gl_Position = mc * pv;
