@@ -31,17 +31,25 @@ void main(void)
   vec3 v = -normalize(p.xyz / p.w);                 // 視線ベクトル
   vec3 l = normalize((pl * p.w - p * pl.w).xyz);    // 光線ベクトル
   vec3 n = normalize((mg * cv).xyz);                // 法線ベクトル
-  float lsize = sqrt(l.x * l.x + l.y * l.y + l.z * l.z);
-  float vsize = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+  float lsize = sqrt(l.x * l.x + l.y * l.y + l.z * l.z);//光線ベクトルの大きさ
+  float vsize = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);//視線ベクトルの大きさ
   vec3 h = (l + v)/(lsize + vsize);// 中間ベクトル
 
   //【宿題】下の１行（の右辺）を置き換えてください
-  vec4 iamb = vec4(kamb.x * lamb.x , kamb.y * lamb.y , kamb.z * lamb.z, kamb.w * lamb.w);
-  //vec4 idiff =
 
+  //環境の反射光強度
+  vec4 iamb = vec4(kamb.x * lamb.x , kamb.y * lamb.y , kamb.z * lamb.z, kamb.w * lamb.w);
+
+  //拡散反射光強度
+  float NL = n.x * l.x + n.y * l.y + n.z * l.z;
+  vec4 idiff = max(NL, 0) * vec4(kdiff.x * ldiff.x , kdiff.y * ldiff.y, kdiff.z * ldiff.z, kdiff.w * ldiff.w);
+
+
+  //鏡面反射光強度
   float NH = n.x * h.x + n.y * h.y + n.z * h.z;
   vec4 ispec = pow(max(NH, 0), kshi) * vec4(kspec.x * lspec.x , kspec.y * lspec.y, kspec.z * lspec.z, kspec.w * lspec.w);
-  vc = iamb + ispec;
+
+  vc = iamb + idiff + ispec;
 
   gl_Position = mc * pv;
 }
