@@ -38,9 +38,10 @@ void main(void)
   //【宿題】下の１行（の右辺）を置き換えてください
   vec4 iamb = vec4(kamb.x * lamb.x , kamb.y * lamb.y , kamb.z * lamb.z, kamb.w * lamb.w);
   //vec4 idiff =
-  //float NH = n.x + h
-  //vec4 ispec = Max()
-  vc = iamb;
+
+  float NH = n.x * h.x + n.y * h.y + n.z * h.z;
+  vec4 ispec = pow(max(NH, 0), kshi) * vec4(kspec.x * lspec.x , kspec.y * lspec.y, kspec.z * lspec.z, kspec.w * lspec.w);
+  vc = iamb + ispec;
 
   gl_Position = mc * pv;
 }
